@@ -1,0 +1,218 @@
+/* Welcome step of the interests onboarding: dark screen with floating brand cards */
+.onb.wel {
+  overflow: hidden;
+  background: #18181b;
+  animation: none;
+}
+
+.wel__glow {
+  position: absolute;
+  max-width: none;
+  pointer-events: none;
+  opacity: 0;
+  animation: wel-glow-in 1400ms ease 100ms forwards;
+}
+
+.wel__glow--top {
+  top: calc(50% - 559px);
+  left: 7.6px;
+  width: 614.8px;
+  height: 614.8px;
+}
+
+.wel__glow--bottom {
+  --rot: -160.3deg;
+  top: calc(50% - 95px);
+  left: -322px;
+  width: 985px;
+  height: 985px;
+  transform: rotate(var(--rot));
+}
+
+@keyframes wel-glow-in {
+  to {
+    opacity: 1;
+  }
+}
+
+.wel__glow--top {
+  animation:
+    wel-glow-in 1400ms ease 100ms forwards,
+    wel-drift 14s ease-in-out 1500ms infinite alternate;
+}
+
+.wel__glow--bottom {
+  animation:
+    wel-glow-in 1400ms ease 100ms forwards,
+    wel-drift 18s ease-in-out 1500ms infinite alternate-reverse;
+}
+
+@keyframes wel-drift {
+  from {
+    transform: translate(0, 0) scale(1) rotate(var(--rot, 0deg));
+  }
+  to {
+    transform: translate(24px, 18px) scale(1.06) rotate(var(--rot, 0deg));
+  }
+}
+
+/* Cards are placed from the screen centre, so they stay around the copy at any height */
+.wel__field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.wel-tile {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 79.78px;
+  height: 92px;
+  /* Fly out from the centre with a small overshoot, in a cascade */
+  animation: wel-fly 1100ms cubic-bezier(0.34, 1.45, 0.64, 1) both;
+  animation-delay: calc(var(--i) * 110ms + 250ms);
+}
+
+@keyframes wel-fly {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) translate(0, 0) scale(0.25) rotate(0deg);
+  }
+  35% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) scale(1) rotate(var(--r));
+  }
+}
+
+.wel-tile__float {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  border: 0.72px solid #e4e4e7;
+  border-radius: 8.6px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  /* Idle bobbing, each card on its own rhythm */
+  animation: wel-float calc(4.2s + var(--i) * 0.45s) ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * -0.9s);
+}
+
+@keyframes wel-float {
+  from {
+    transform: translateY(-5px) rotate(-1.2deg);
+  }
+  to {
+    transform: translateY(5px) rotate(1.2deg);
+  }
+}
+
+.wel-tile__logo {
+  position: absolute;
+  overflow: hidden;
+}
+
+.wel-tile__logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+}
+
+.wel-tile__logo img.is-crop {
+  position: absolute;
+  max-width: none;
+}
+
+.wel__skip {
+  position: absolute;
+  top: 52px;
+  right: 16px;
+  z-index: 2;
+  padding: 8px 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.wel__copy {
+  position: absolute;
+  top: calc(50% - 64px);
+  right: 32px;
+  left: 32px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+  animation: wel-copy 800ms cubic-bezier(0.22, 1, 0.36, 1) 1000ms both;
+}
+
+@keyframes wel-copy {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+.wel__copy h1 {
+  margin: 0;
+  font-family: var(--font-title);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 34px;
+  letter-spacing: -0.24px;
+  color: #ffffff;
+}
+
+.wel__copy p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #e4e4e7;
+}
+
+.wel__footer {
+  position: absolute;
+  right: 16px;
+  bottom: 20px;
+  left: 16px;
+  z-index: 1;
+  animation: wel-copy 800ms cubic-bezier(0.22, 1, 0.36, 1) 1300ms both;
+}
+
+.onb.wel .wel__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  font-size: 18px;
+  border-radius: 8px;
+}
+
+@media (min-width: 560px) {
+  .wel__skip {
+    top: 66px;
+  }
+
+  .wel__footer {
+    bottom: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wel,
+  .wel * {
+    animation: none !important;
+  }
+
+  .wel-tile {
+    opacity: 1;
+    transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) rotate(var(--r));
+  }
+}

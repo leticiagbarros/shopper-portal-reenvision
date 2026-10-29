@@ -1,0 +1,383 @@
+/* Notification permission: a bottom sheet over the dimmed app, like a pre-prompt */
+.onb.notif {
+  justify-content: flex-end;
+  overflow: clip;
+  background: transparent;
+  animation: none;
+}
+
+.notif.is-leaving {
+  opacity: 0;
+  transition: opacity 340ms ease;
+}
+
+.notif__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  animation: notif-fade 400ms ease both;
+}
+
+@keyframes notif-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.notif__sheet {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 10px 20px 20px;
+  text-align: center;
+  background: #f7f7f8;
+  border-radius: 28px 28px 0 0;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.2);
+  animation: notif-sheet 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes notif-sheet {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@media (min-width: 560px) {
+  .notif__sheet {
+    padding-bottom: 36px;
+  }
+}
+
+.notif__grabber {
+  align-self: center;
+  width: 40px;
+  height: 5px;
+  margin-bottom: 22px;
+  background: #c7c7cc;
+  border-radius: 3px;
+}
+
+.notif__title {
+  margin: 0 0 10px;
+  font-family: var(--font-title);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.2px;
+  color: #000000;
+}
+
+.notif__text {
+  margin: 0 0 12px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--onsurface-low);
+}
+
+.notif__text--note {
+  font-size: 12px;
+  color: #71717a;
+}
+
+.onb.notif .notif__continue {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  font-size: 18px;
+  border-radius: 8px;
+}
+
+.notif__skip {
+  align-self: center;
+  margin-top: 8px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--onsurface-highest);
+  text-decoration: underline;
+}
+
+/* The system alert sits above the sheet */
+.notif__alert {
+  z-index: 5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notif,
+  .notif * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Nearby stores map */
+.nmap {
+  position: relative;
+  height: 190px;
+  margin: 18px 0 18px;
+}
+
+/* The map is clipped; the markers sit on top and may overhang its edge */
+.nmap__map {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #f3f3f1;
+  border-radius: 18px;
+}
+
+.nmap__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.nmap__pin {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 6px 16px rgba(24, 24, 27, 0.18);
+  transform: translate(-50%, -50%);
+}
+
+.nmap__pin--logo {
+  padding: 14px;
+  background: #ffffff;
+}
+
+.nmap__pin--logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.nmap__pin--dark {
+  color: #ffffff;
+  background: #18181b;
+  box-shadow: 0 0 0 3px #ffffff, 0 6px 16px rgba(24, 24, 27, 0.25);
+}
+
+
+
+/* One 5.4s loop: logos, pins and the refund card pop up in turn, hold, then fade out and start again */
+.nmap-i-0 {
+  animation: nmap-pop-0 5.4s linear infinite both;
+}
+
+.nmap-i-1 {
+  animation: nmap-pop-1 5.4s linear infinite both;
+}
+
+.nmap-i-2 {
+  animation: nmap-pop-2 5.4s linear infinite both;
+}
+
+.nmap-i-3 {
+  animation: nmap-pop-3 5.4s linear infinite both;
+}
+
+.nmap-i-4 {
+  animation: nmap-pop-4 5.4s linear infinite both;
+}
+
+.nmap-i-5 {
+  animation: nmap-pop-5 5.4s linear infinite both;
+}
+
+@keyframes nmap-pop-0 {
+  0%,
+  4% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+    animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  11%,
+  90% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    animation-timing-function: ease-in;
+  }
+  97%,
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.7);
+  }
+}
+
+@keyframes nmap-pop-1 {
+  0%,
+  10% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+    animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  17%,
+  90% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    animation-timing-function: ease-in;
+  }
+  97%,
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.7);
+  }
+}
+
+@keyframes nmap-pop-2 {
+  0%,
+  16% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+    animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  23%,
+  90% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    animation-timing-function: ease-in;
+  }
+  97%,
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.7);
+  }
+}
+
+@keyframes nmap-pop-3 {
+  0%,
+  22% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+    animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  29%,
+  90% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    animation-timing-function: ease-in;
+  }
+  97%,
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.7);
+  }
+}
+
+@keyframes nmap-pop-4 {
+  0%,
+  28% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+    animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  35%,
+  90% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    animation-timing-function: ease-in;
+  }
+  97%,
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.7);
+  }
+}
+
+@keyframes nmap-pop-5 {
+  0%,
+  36% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.85);
+    animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  43%,
+  90% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    animation-timing-function: ease-in;
+  }
+  97%,
+  100% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.9);
+  }
+}
+
+/* "You are here" */
+.nmap__dot {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  background: #18181b;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+}
+
+.nmap__dot i {
+  position: absolute;
+  inset: -2px;
+  border: 1.5px solid #18181b;
+  border-radius: 50%;
+  opacity: 0;
+  animation: nmap-pulse 2.4s ease-out 0.8s infinite;
+}
+
+@keyframes nmap-pulse {
+  from {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(3.6);
+  }
+}
+
+.nmap__card {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px 8px 8px;
+  text-align: left;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 8px 22px rgba(24, 24, 27, 0.2);
+}
+
+
+.nmap__card-icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: #ffffff;
+  background: #18181b;
+  border-radius: 9px;
+}
+
+.nmap__card-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--onsurface-highest);
+}
+
+.nmap__card-text {
+  margin: 2px 0 0;
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--onsurface-low);
+}

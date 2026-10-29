@@ -1,0 +1,585 @@
+/* First screen: reuses the .onb overlay container */
+.onb.login {
+  background: #ffffff;
+  animation: none;
+  /* clip, not hidden: focusing the input while the sheet is still sliding in must not scroll the screen */
+  overflow: clip;
+}
+
+.login.is-leaving {
+  opacity: 0;
+  transform: scale(1.02);
+  transition: opacity 360ms ease, transform 360ms ease;
+}
+
+.login__start,
+.login__check {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.login__start {
+  align-items: center;
+  gap: 24px;
+  padding: 56px 16px 20px;
+  overflow-y: auto;
+}
+
+@media (min-width: 560px) {
+  .login__start {
+    padding-top: 68px;
+    padding-bottom: 32px;
+  }
+}
+
+/* Staggered entrance: each element rises in order of --i */
+.login__in {
+  animation: login-rise 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i, 0) * 80ms + 100ms);
+}
+
+@keyframes login-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+.login .login__skip {
+  position: absolute;
+  top: 52px;
+  right: 16px;
+  left: auto;
+  width: 44px;
+  height: 44px;
+  transform: none;
+  animation: login-fade 600ms ease 400ms both;
+}
+
+@media (min-width: 560px) {
+  .login .login__skip {
+    top: 66px;
+  }
+}
+
+.login__logo {
+  flex: none;
+  width: 150px;
+  height: 36px;
+  animation-name: login-logo;
+  animation-duration: 900ms;
+}
+
+@keyframes login-logo {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
+
+.login__collage {
+  flex: none;
+  width: 100%;
+  max-width: 328px;
+  height: auto;
+  aspect-ratio: 328 / 190;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.login__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding: 0 16px;
+}
+
+.login__heading {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.57;
+  color: #000000;
+}
+
+.login__or {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 14px;
+  color: #5f5f5f;
+}
+
+.login__or span {
+  flex: 1;
+  height: 1px;
+  background: #d9d9d9;
+}
+
+/* Outlined social buttons */
+.login__social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 48px;
+  padding: 0 32px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #030712;
+  background: #ffffff;
+  border: 1px solid #71717a;
+  border-radius: 8px;
+  transition: background 150ms ease, transform 120ms ease;
+}
+
+.login__social:active {
+  background: #f4f4f5;
+  transform: scale(0.98);
+}
+
+.login__social:disabled {
+  opacity: 0.6;
+}
+
+.login__note {
+  margin: 0;
+  font-size: 14px;
+  line-height: 16px;
+  text-align: center;
+  color: var(--onsurface-low);
+}
+
+/* Language dropdown opens upwards from the bottom of the screen */
+.login__langwrap {
+  position: relative;
+  margin-top: -8px;
+}
+
+.login__lang {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 8px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 16px;
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.login__lang img {
+  transition: transform 200ms ease;
+}
+
+.login__lang[aria-expanded='true'] img {
+  transform: rotate(180deg);
+}
+
+.login__langlist {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  z-index: 3;
+  min-width: 160px;
+  margin: 0 0 4px;
+  padding: 6px;
+  list-style: none;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18), 0 0 0 1px #e4e4e7;
+  transform: translateX(-50%);
+  animation: login-pop 180ms ease both;
+}
+
+@keyframes login-pop {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(6px);
+  }
+}
+
+.login__langlist button {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  text-align: left;
+  border-radius: 8px;
+}
+
+.login__langlist button:hover,
+.login__langlist button:focus-visible {
+  background: #f4f4f5;
+}
+
+.login__langlist button[aria-selected='true'] {
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.login__input {
+  width: 100%;
+  height: 52px;
+  padding: 0 16px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--onsurface-highest);
+  background: #ffffff;
+  border: 1px solid #71717a;
+  border-radius: 8px;
+}
+
+.login__input::placeholder {
+  color: var(--onsurface-low);
+}
+
+.login__input:focus {
+  border-color: var(--onsurface-highest);
+  box-shadow: inset 0 0 0 1px var(--onsurface-highest);
+  outline: 0;
+}
+
+.login__input[aria-invalid='true'] {
+  border-color: #b91c1c;
+}
+
+.login__error {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: #b91c1c;
+}
+
+.login .login__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  font-size: 18px;
+  border-radius: 8px;
+}
+
+/* Backdrop and bottom sheet for the email field */
+.login__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgba(24, 24, 27, 0.45);
+  animation: login-fade 300ms ease both;
+}
+
+.login__scrim.is-out {
+  opacity: 0;
+  transition: opacity 260ms ease;
+}
+
+@keyframes login-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.login__sheet {
+  position: absolute;
+  top: 64px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 16px 32px;
+  background: #ffffff;
+  border-radius: 28px 28px 0 0;
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.18);
+  animation: login-sheet 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.login__sheet.is-out {
+  transform: translateY(100%);
+  transition: transform 260ms cubic-bezier(0.55, 0, 0.8, 0.4);
+  animation: none;
+}
+
+.login__sheet .login__btn {
+  margin-top: auto;
+}
+
+@media (min-width: 560px) {
+  .login__sheet {
+    top: 76px;
+    padding-bottom: 40px;
+  }
+}
+
+@keyframes login-sheet {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+.login .login__close {
+  position: static;
+  flex: none;
+  align-self: flex-start;
+  width: 36px;
+  height: 36px;
+  transform: none;
+  box-shadow: inset 0 0 0 1px #d4d4d8;
+}
+
+.login__sheet-title {
+  margin: -36px 0 8px;
+  font-family: var(--font-title);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 36px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.login-spinner {
+  display: inline-block;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: login-spin 700ms linear infinite;
+}
+
+@keyframes login-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Sheet views that end in an on-screen keyboard (email entry, code entry) */
+.login__sheet.login__sheet--keys {
+  padding-bottom: 0;
+}
+
+.login__sheet--keys .login__btn {
+  margin-bottom: 8px;
+}
+
+/* iOS-style keyboard standing in for the phone keyboard */
+.kb {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  margin: 0 -16px;
+  padding: 8px 3px 28px;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', Inter, system-ui, sans-serif;
+  background: #d1d4d9;
+  border-radius: 14px 14px 0 0;
+}
+
+.kb__row {
+  display: flex;
+  gap: 6px;
+}
+
+.kb__row--inset {
+  padding: 0 18px;
+}
+
+.kb__key {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 42px;
+  font-size: 22px;
+  line-height: 1;
+  color: #000000;
+  background: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+  transition: background 60ms ease;
+}
+
+.kb__key:active {
+  background: #b6b9c0;
+}
+
+.kb__key--dark {
+  background: #acb1bb;
+}
+
+.kb__key--dark:active,
+.kb__key--dark.is-on {
+  background: #ffffff;
+}
+
+.kb__key--wide {
+  flex: 0 0 44px;
+}
+
+.kb__key--text {
+  font-size: 15px;
+}
+
+.kb__row > .kb__key--text:first-child {
+  flex: 0 0 56px;
+}
+
+.kb__row > .kb__key--text:last-child {
+  flex: 0 0 92px;
+}
+
+.kb__key--grow {
+  flex: 2.6;
+  font-size: 17px;
+}
+
+.kb__key:disabled {
+  opacity: 0.6;
+}
+
+.login__check-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 8px 0;
+  text-align: center;
+}
+
+.login__mail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  color: var(--primary);
+  background: rgba(79, 70, 229, 0.08);
+  border-radius: 50%;
+}
+
+.login__mail svg {
+  width: 26px;
+  height: 26px;
+}
+
+.login__check-title {
+  margin: 8px 0 0;
+  font-family: var(--font-title);
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.login__check-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--onsurface-low);
+  overflow-wrap: anywhere;
+}
+
+.login__check-text strong {
+  font-weight: 600;
+  color: var(--onsurface-highest);
+}
+
+.login__input--code {
+  width: 176px;
+  margin-top: 8px;
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 6px;
+  text-align: center;
+}
+
+.login__input--code::placeholder {
+  font-size: 16px;
+  letter-spacing: 0;
+}
+
+.login__link {
+  padding: 4px 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.login__link:disabled {
+  color: var(--onsurface-low);
+  text-decoration: none;
+}
+
+.login__sent {
+  min-height: 16px;
+  margin: -8px 0 0;
+  font-size: 12px;
+  color: #15803d;
+}
+
+/* On-screen number keypad, standing in for the phone keyboard */
+.login__keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin: 0 -16px;
+  padding: 8px 6px 28px;
+  background: #e6e6ea;
+  border-radius: 14px 14px 0 0;
+}
+
+.login__keypad button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  font-size: 24px;
+  line-height: 1;
+  color: #000000;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+  transition: background 80ms ease;
+}
+
+.login__keypad button span {
+  margin-top: 2px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+.login__keypad button:active {
+  background: #d4d4d8;
+}
+
+.login__keypad button:disabled {
+  opacity: 0.6;
+}
+
+.login__keypad button:nth-child(10) {
+  grid-column: 2;
+}
+
+.login__keypad .login__key-del {
+  background: transparent;
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login,
+  .login * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

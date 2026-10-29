@@ -1,0 +1,398 @@
+/* Simulated camera: iris opens, iOS permission alert, passport scan. Lives inside the .onb overlay. */
+.cam {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: #ffffff;
+  background: #0b0b0c;
+  /* Opens like an iris from where the Scan button sits */
+  animation: cam-open 800ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+@keyframes cam-open {
+  from {
+    clip-path: circle(0% at 50% 90%);
+  }
+  to {
+    clip-path: circle(150% at 50% 90%);
+  }
+}
+
+/* Dim, slightly moving "live" feed */
+.cam__feed {
+  position: absolute;
+  inset: -6%;
+  background:
+    radial-gradient(70% 45% at 25% 18%, rgba(113, 113, 122, 0.55), transparent 70%),
+    radial-gradient(60% 50% at 85% 85%, rgba(63, 63, 70, 0.7), transparent 70%),
+    radial-gradient(50% 35% at 60% 55%, rgba(39, 39, 42, 0.9), transparent 75%),
+    #121214;
+  animation: cam-drift 9s ease-in-out infinite alternate;
+}
+
+@keyframes cam-drift {
+  to {
+    transform: translate(-2%, 1.5%) scale(1.04);
+  }
+}
+
+.cam__top {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 58px 16px 0;
+}
+
+@media (min-width: 560px) {
+  .cam__top {
+    padding-top: 72px;
+  }
+}
+
+.cam__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 50%;
+  backdrop-filter: blur(12px);
+}
+
+.cam__hint {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  color: #f4f4f5;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+}
+
+.cam__stage {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  flex: 1;
+  place-items: center;
+  padding-bottom: 40px;
+}
+
+/* Viewfinder corners tighten as the passport is found */
+.cam__frame {
+  position: relative;
+  width: 332px;
+  max-width: calc(100% - 24px);
+  height: 238px;
+}
+
+.cam__corner {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 0 solid rgba(255, 255, 255, 0.9);
+}
+
+.cam__corner--tl {
+  top: 0;
+  left: 0;
+  border-width: 3px 0 0 3px;
+  border-top-left-radius: 12px;
+}
+
+.cam__corner--tr {
+  top: 0;
+  right: 0;
+  border-width: 3px 3px 0 0;
+  border-top-right-radius: 12px;
+}
+
+.cam__corner--bl {
+  bottom: 0;
+  left: 0;
+  border-width: 0 0 3px 3px;
+  border-bottom-left-radius: 12px;
+}
+
+.cam__corner--br {
+  right: 0;
+  bottom: 0;
+  border-width: 0 3px 3px 0;
+  border-bottom-right-radius: 12px;
+}
+
+.cam__frame.is-locking .cam__corner {
+  animation: cam-lock 2.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes cam-lock {
+  0% {
+    transform: translate(0, 0);
+  }
+  38% {
+    transform: translate(var(--lx, 0), var(--ly, 0));
+  }
+  100% {
+    transform: translate(var(--lx, 0), var(--ly, 0));
+  }
+}
+
+.cam__corner--tl {
+  --lx: 6px;
+  --ly: 6px;
+}
+
+.cam__corner--tr {
+  --lx: -6px;
+  --ly: 6px;
+}
+
+.cam__corner--bl {
+  --lx: 6px;
+  --ly: -6px;
+}
+
+.cam__corner--br {
+  --lx: -6px;
+  --ly: -6px;
+}
+
+/* Fake passport photo page, found and focused in the frame */
+.cam-pass {
+  --t: 2.6s;
+  position: absolute;
+  top: 17px;
+  left: 16px;
+  width: 300px;
+  height: 204px;
+  overflow: hidden;
+  background: #f4f4f5;
+  border-radius: 10px;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55);
+  animation: cam-pass-in var(--t) linear both;
+  will-change: transform, opacity, filter;
+}
+
+@keyframes cam-pass-in {
+  0% {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translate(46px, 72px) rotate(9deg) scale(0.88);
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  38%,
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate(0, 0) rotate(0) scale(1);
+  }
+}
+
+.cam-pass__page {
+  position: relative;
+  height: 140px;
+  padding: 14px 16px 0;
+}
+
+.cam-pass__title {
+  margin: 0 0 12px;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: #52525b;
+}
+
+.cam-pass__row {
+  display: flex;
+  gap: 18px;
+}
+
+.cam-pass__photo {
+  position: relative;
+  flex: none;
+  width: 70px;
+  height: 86px;
+  overflow: hidden;
+  background: #e4e4e7;
+  border-radius: 4px;
+}
+
+.cam-pass__head {
+  position: absolute;
+  top: 17px;
+  left: 24px;
+  width: 22px;
+  height: 25px;
+  background: #a1a1aa;
+  border-radius: 50%;
+}
+
+.cam-pass__shoulders {
+  position: absolute;
+  bottom: -16px;
+  left: 10px;
+  width: 50px;
+  height: 42px;
+  background: #a1a1aa;
+  border-radius: 50%;
+}
+
+.cam-pass__fields {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 11px;
+  padding-top: 5px;
+}
+
+.cam-pass__fields span {
+  height: 5px;
+  background: #e4e4e7;
+  border-radius: 3px;
+}
+
+.cam-pass__mrz {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 64px;
+  padding: 12px 12px 0;
+  background: #fafafa;
+  border-top: 1px solid #e4e4e7;
+}
+
+.cam-pass__mrz p {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font: 500 9.6px/14px 'SF Mono', ui-monospace, Menlo, monospace;
+  white-space: nowrap;
+  color: #09090b;
+}
+
+/* iOS system permission alert */
+.cam-alert {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.4);
+  animation: cam-fade 220ms ease both;
+}
+
+@keyframes cam-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.cam-alert__box {
+  width: 270px;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', Inter, system-ui, sans-serif;
+  color: #000000;
+  background: rgba(242, 242, 247, 0.92);
+  border-radius: 14px;
+  backdrop-filter: blur(30px) saturate(1.8);
+  animation: cam-alert-in 320ms cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+
+@keyframes cam-alert-in {
+  from {
+    opacity: 0;
+    transform: scale(1.12);
+  }
+}
+
+.cam-alert__body {
+  padding: 20px 16px 18px;
+  text-align: center;
+}
+
+.cam-alert__body h2 {
+  margin: 0 0 4px;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 22px;
+  letter-spacing: -0.41px;
+}
+
+.cam-alert__body p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: -0.08px;
+}
+
+.cam-alert__actions {
+  display: flex;
+  border-top: 0.5px solid rgba(60, 60, 67, 0.36);
+}
+
+.cam-alert__actions button {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0;
+  font-family: inherit;
+  font-size: 17px;
+  letter-spacing: -0.41px;
+  text-align: center;
+  color: #007aff;
+}
+
+.cam-alert__actions button.is-primary {
+  font-weight: 600;
+}
+
+.cam-alert__actions button + button {
+  font-weight: 600;
+  border-left: 0.5px solid rgba(60, 60, 67, 0.36);
+}
+
+.cam-alert__actions button:active {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* Location alert: stacked iOS buttons, above the tab bar and sheets */
+.loc-alert {
+  z-index: 2000;
+}
+
+.cam-alert__actions--stack {
+  flex-direction: column;
+  border-top: 0;
+}
+
+.cam-alert__actions--stack button {
+  flex: none;
+  font-weight: 400;
+  border-top: 0.5px solid rgba(60, 60, 67, 0.36);
+  border-left: 0;
+}
+
+.cam-alert__actions--stack button + button {
+  border-left: 0;
+}
+
+.cam-alert__actions--stack button:nth-child(2) {
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cam,
+  .cam * {
+    animation: none !important;
+  }
+}

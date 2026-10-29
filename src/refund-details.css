@@ -1,0 +1,366 @@
+.screen__content.rd {
+  gap: 16px;
+  min-height: 100dvh;
+  padding-bottom: 32px;
+}
+
+@media (min-width: 560px) {
+  .screen__content.rd {
+    min-height: 100%;
+    padding-bottom: 48px;
+  }
+}
+
+/* Alert */
+.rd-alert {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  color: #b45309;
+  background: #fffbeb;
+  border: 1px solid #b45309;
+  border-radius: 8px;
+}
+
+.rd-alert img {
+  flex: none;
+  margin-top: 2px;
+}
+
+.rd-alert p {
+  margin: 0;
+}
+
+.rd-alert__title {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.rd-alert__text {
+  margin-top: 4px !important;
+  font-size: 14px;
+  line-height: 1.57;
+}
+
+/* Status card */
+.rd-status {
+  display: flex;
+  flex-direction: column;
+}
+
+.rd-status__head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.57;
+  color: #451a03;
+  background: #fbe7b0;
+  border-radius: 12px 12px 0 0;
+}
+
+.rd-status__head.is-done {
+  color: #14532d;
+  background: #bbf7d0;
+}
+
+.rd-status__head svg {
+  width: 16px;
+  height: 16px;
+}
+
+.rd-status__body {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-6);
+  border-radius: 0 0 12px 12px;
+}
+
+.rd-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  border-bottom: 1px solid #e4e4e7;
+}
+
+.rd-progress__bars {
+  display: flex;
+  flex: 1;
+  gap: 4px;
+}
+
+.rd-progress__bars span {
+  flex: 1;
+  height: 4px;
+  background: #e4e4e7;
+  border-radius: 4px;
+  transition: background 300ms ease;
+}
+
+.rd-progress__bars span.is-on {
+  background: var(--onsurface-highest);
+}
+
+.rd-progress__label {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.66;
+  white-space: nowrap;
+  color: var(--onsurface-low);
+}
+
+.rd-status__content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.rd-status__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 25px;
+  letter-spacing: -0.17px;
+}
+
+.rd-status__text {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 1.57;
+  color: var(--onsurface-low);
+}
+
+/* CTA to the guided next steps */
+.rd-cta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  color: #ffffff;
+  background:
+    radial-gradient(120% 140% at 100% 0%, rgba(99, 102, 241, 0.6), transparent 60%),
+    #0b0b14;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(30, 27, 75, 0.25);
+  transition: transform 120ms ease;
+}
+
+.rd-cta:active {
+  transform: scale(0.985);
+}
+
+.rd-cta__icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.rd-cta__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.rd-cta__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rd-cta__text strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.rd-cta__text small {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.rd-cta > img {
+  flex: none;
+  filter: invert(1);
+}
+
+/* Accordions */
+.rd-accordions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rd-accordion {
+  background: var(--surface-6);
+  border-radius: 12px;
+}
+
+.rd-accordion summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.57;
+  list-style: none;
+  cursor: pointer;
+}
+
+.rd-accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.rd-accordion summary img {
+  transition: transform 200ms ease;
+}
+
+.rd-accordion[open] summary img {
+  transform: rotate(180deg);
+}
+
+.rd-accordion__body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0 16px 16px;
+}
+
+.rd-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.rd-row__label {
+  flex: none;
+  font-weight: 500;
+  color: var(--onsurface-highest);
+}
+
+.rd-row__value {
+  min-width: 0;
+  text-align: right;
+  color: var(--onsurface-low);
+  overflow-wrap: anywhere;
+}
+
+.rd-total {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 14px;
+  font-size: 14px;
+  border-top: 1px solid #e4e4e7;
+}
+
+.rd-total__value {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.rd-total__value strong {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+}
+
+.rd-total__value small {
+  font-size: 14px;
+  color: var(--onsurface-low);
+}
+
+.rd-barcode-text {
+  margin: 4px 0 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--onsurface-low);
+}
+
+.barcode {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+}
+
+.barcode svg {
+  width: 100%;
+  height: 96px;
+}
+
+.barcode--large svg {
+  height: 120px;
+}
+
+.barcode figcaption {
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: var(--onsurface-highest);
+}
+
+.rd-view-form {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 2px -16px -16px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: left;
+  border-top: 1px solid #e4e4e7;
+  border-radius: 0 0 12px 12px;
+}
+
+.rd-view-form span {
+  flex: 1;
+}
+
+.rd-view-form:active {
+  background: var(--surface-5);
+}
+
+/* Add card button sits at the end of the page, pinned to the bottom when the content is short */
+.rd-add-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: auto;
+  padding: 16px 32px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #4f46e5;
+  text-align: center;
+  background: rgba(79, 70, 229, 0.08);
+  border-radius: 8px;
+  transition: transform 120ms ease;
+}
+
+.rd-add-card:active {
+  transform: scale(0.98);
+}

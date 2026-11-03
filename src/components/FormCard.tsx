@@ -1,4 +1,5 @@
 import chevron from '../assets/icons/chevron-right.svg';
+import customsTag from '../assets/refund-cards/get-customs-tag.svg';
 
 interface Props {
   merchant: string;
@@ -10,7 +11,7 @@ interface Props {
 export function FormCard({ merchant, amount, onOpen }: Props) {
   return (
     <button type="button" className="form-card" onClick={onOpen}>
-      <span className="form-card__tab">Get Customs approval</span>
+      <img className="form-card__tab" src={customsTag} alt="Get Customs approval" draggable={false} />
       <span className="form-card__body">
         <span className="form-card__merchant">{merchant}</span>
         <span className="form-card__row">

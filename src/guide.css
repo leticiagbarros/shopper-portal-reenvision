@@ -256,13 +256,18 @@
   border-radius: 12px;
 }
 
-/* Form card matching the Get Customs approval design */
+/* Form card matching the Get Customs approval design: everything scales with the card width, like the 328x127 image */
 .form-card {
+  --u: calc(100cqw / 358);
   position: relative;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   width: 100%;
-  padding: 0 0 20px;
+  aspect-ratio: 328 / 127;
+  padding: 0;
   overflow: hidden;
+  container-type: inline-size;
   text-align: left;
   background: var(--surface-6);
   border-radius: 12px;
@@ -274,28 +279,23 @@
 }
 
 .form-card__tab {
-  display: inline-block;
-  padding: 4px 12px 4px 16px;
-  margin-bottom: 8px;
-  font-size: 12px;
-  line-height: 1.66;
-  color: #92400e;
-  background: #ffe8a9;
-  border-radius: 0 0 16px 0;
+  display: block;
+  width: calc(174.6 * var(--u));
+  height: auto;
 }
 
 .form-card__body {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 0 16px;
+  gap: calc(10.5 * var(--u));
+  padding: calc(9.6 * var(--u)) calc(17.5 * var(--u)) 0 calc(17.2 * var(--u));
 }
 
 .form-card__merchant {
   font-family: var(--font-title);
-  font-size: 20px;
+  font-size: calc(19 * var(--u));
   font-weight: 700;
-  line-height: 24px;
+  line-height: calc(24 * var(--u));
   color: var(--onsurface-highest);
 }
 
@@ -307,8 +307,9 @@
 }
 
 .form-card__label {
-  font-size: 14px;
-  line-height: 1.57;
+  padding-top: calc(0.7 * var(--u));
+  font-size: calc(15.4 * var(--u));
+  line-height: calc(22 * var(--u));
   color: var(--onsurface-low);
 }
 
@@ -316,26 +317,31 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  margin-top: calc(1 * var(--u));
 }
 
 .form-card__amount {
-  font-size: 17px;
+  font-size: calc(18.5 * var(--u));
   font-weight: 700;
-  line-height: 25px;
-  letter-spacing: -0.17px;
+  line-height: calc(25 * var(--u));
+  /* The Gucci image's price is slightly bolder than Inter 700 */
+  -webkit-text-stroke: 0.09px currentColor;
   color: var(--onsurface-highest);
 }
 
 .form-card__fees {
-  font-size: 12px;
-  line-height: 1.66;
+  margin-top: calc(0.3 * var(--u));
+  font-size: calc(13 * var(--u));
+  line-height: calc(20 * var(--u));
   color: var(--onsurface-low);
 }
 
 .form-card__chevron {
   position: absolute;
-  top: 50px;
-  right: 16px;
+  top: calc(41.1 * var(--u));
+  right: calc(18.5 * var(--u));
+  width: calc(16 * var(--u));
+  height: calc(16 * var(--u));
 }
 
 .plan__summary {

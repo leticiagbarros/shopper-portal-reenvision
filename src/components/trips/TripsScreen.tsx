@@ -11,7 +11,8 @@ import { STORES, brandOfStore, cityById, formatRange, type Category, type Prefer
 
 type View = { name: 'list' } | { name: 'create' } | { name: 'trip'; tripId: string };
 
-export type TripsLayer = 'trip' | 'create' | 'dialog' | null;
+// 'sheet' is the My trips home with its sheet pulled up.
+export type TripsLayer = 'trip' | 'create' | 'dialog' | 'sheet' | null;
 
 interface Props {
   trips: Trip[];
@@ -67,7 +68,7 @@ export function TripsScreen({ trips, setTrips, onLayerChange, prefs, onEditInter
     };
   }, [city, trip, visible, selectedId, view.name, trips]);
 
-  const layer: TripsLayer = askReminder ? 'dialog' : view.name === 'list' ? null : view.name;
+  const layer: TripsLayer = askReminder ? 'dialog' : view.name === 'list' ? (snap === 'title' ? null : 'sheet') : view.name;
   useEffect(() => {
     onLayerChange(layer);
     return () => onLayerChange(null);
@@ -291,7 +292,7 @@ export function TripsScreen({ trips, setTrips, onLayerChange, prefs, onEditInter
   const viewKey = view.name === 'trip' ? view.tripId : view.name;
 
   return (
-    <div className="trips">
+    <div className="trips trips--create">
       <div className="trips__scroll" key={viewKey}>
         <div className="screen__content">
           {header}

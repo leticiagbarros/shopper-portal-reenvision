@@ -78,16 +78,16 @@ export function Welcome({ onStart, onSkip }: Props) {
 
       <div className="wel__copy">
         <h1 id="wel-title">
-          Welcome to
+          Find Tax Free
           <br />
-          Shopper Portal
+          stores you’ll love
         </h1>
-        <p>Tell us what you love to shop and we will show the Tax Free stores that match you best.</p>
+        <p>Tell us what you like to shop for, and we’ll show you stores that match your interests.</p>
       </div>
 
       <footer className="wel__footer">
         <button type="button" className="btn-primary wel__btn" onClick={onStart}>
-          Get started
+          Continue
         </button>
       </footer>
     </div>

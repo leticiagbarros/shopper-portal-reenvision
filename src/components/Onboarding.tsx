@@ -44,7 +44,8 @@ export function Onboarding({ initial, initialStep = 0, onFinish, onClose }: Prop
     return fa - fb;
   });
 
-  const back = () => setStep(step - 1);
+  // Back from the first step leaves the flow, returning to the screen it was opened from (Profile).
+  const back = () => (step === 1 ? onClose() : setStep(step - 1));
 
   if (step === 0) return <Welcome onStart={() => setStep(1)} onSkip={onClose} />;
 
@@ -54,9 +55,6 @@ export function Onboarding({ initial, initialStep = 0, onFinish, onClose }: Prop
         <div className="onb__bar">
           <button type="button" className="onb__back" aria-label="Back" onClick={back}>
             <img src={arrowBack} alt="" width={24} height={24} />
-          </button>
-          <button type="button" className="onb__skip" onClick={onClose}>
-            Cancel
           </button>
         </div>
         <div className="onb__progress" role="progressbar" aria-valuemin={1} aria-valuemax={total} aria-valuenow={position + 1} aria-label={`Step ${position + 1} of ${total}`}>

@@ -1078,13 +1078,13 @@
 /* My trips home: the sheet rests as a title bar above the tab bar and the + button rides on top of it */
 .trips {
   --sheet-title: 166px;
-  --fab-bottom: 88px;
+  --fab-bottom: 24px;
 }
 
 @media (min-width: 560px) {
   .trips {
     --sheet-title: 190px;
-    --fab-bottom: 112px;
+    --fab-bottom: 40px;
   }
 }
 
@@ -1252,4 +1252,13 @@
   padding: 14px 12px;
   font-size: 14px;
   color: #52525b;
+}
+
+/* New trip: white, like the sheet it opens from */
+.trips--create {
+  background: #ffffff;
+}
+
+.device:has(.trips--create) .device__status {
+  background: #ffffff;
 }

@@ -20,6 +20,7 @@ import { Register } from './components/Register';
 import { Notifications } from './components/Notifications';
 import { LocationAlert } from './components/LocationAlert';
 import { NearbyNotice } from './components/NearbyNotice';
+import { Toast } from './components/Toast';
 import { ScreenNav } from './components/ScreenNav';
 import type { ScreenId } from './data/screens';
 import helpIcon from './assets/icons/help.svg';
@@ -57,6 +58,7 @@ export function App() {
   const [registered, setRegistered] = useState(false);
   const [notifyDone, setNotifyDone] = useState(false);
   const [locationAsked, setLocationAsked] = useState(false);
+  const [savedToast, setSavedToast] = useState(0);
   const [nearby, setNearby] = useState<'idle' | 'shown' | 'done'>('idle');
   const detailForm = FORMS.find((f) => f.id === detailId);
 
@@ -120,7 +122,7 @@ export function App() {
     !registered ||
     !notifyDone ||
     onboarding !== null ||
-    tab === 'tax-free' || (tab === 'trips' && (layer === null || layer === 'create' || layer === 'dialog')) || (tab === 'refunds' && refundsSecondLayer);
+    tab === 'tax-free' || (tab === 'trips' && layer !== 'trip') || (tab === 'refunds' && refundsSecondLayer);
 
   return (
     <div className="stage">
@@ -248,11 +250,15 @@ export function App() {
             onFinish={(p) => {
               setPrefs(p);
               setOnboarding(null);
+              setSavedToast((n) => n + 1);
             }}
             onClose={() => setOnboarding(null)}
           />
         )}
         <TabBar active={tab} hidden={tabBarHidden} onChange={setTab} />
+        {savedToast > 0 && (
+          <Toast key={savedToast} message="Your preferences were saved" onClose={() => setSavedToast(0)} />
+        )}
         {tab === 'trips' && !firstRunOpen && onboarding === null && !locationAsked && (
           <LocationAlert onAnswer={() => setLocationAsked(true)} />
         )}

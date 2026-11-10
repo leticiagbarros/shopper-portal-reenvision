@@ -11,7 +11,8 @@
 }
 
 .empty-panel__art {
-  margin: 0 0 4px;
+  /* The PNG has transparent padding so its shadow isn't cropped. */
+  margin: -12px 0 -8px;
   filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.1));
 }
 

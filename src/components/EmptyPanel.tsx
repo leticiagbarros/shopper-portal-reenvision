@@ -1,5 +1,5 @@
 import '../empty-panel.css';
-import receiptArt from '../assets/icons/receipt-scroll.svg';
+import receiptArt from '../assets/icons/receipt-scroll.png';
 
 interface Props {
   title: string;
@@ -12,7 +12,7 @@ interface Props {
 export function EmptyPanel({ title, text, action, onAction }: Props) {
   return (
     <section className="empty-panel" aria-labelledby="empty-panel-title">
-      <img className="empty-panel__art" src={receiptArt} alt="" width={104} height={117} draggable={false} />
+      <img className="empty-panel__art" src={receiptArt} alt="" width={127} height={140} draggable={false} />
       <h2 id="empty-panel-title" className="empty-panel__title">
         {title}
       </h2>

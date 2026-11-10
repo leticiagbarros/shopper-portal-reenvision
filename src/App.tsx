@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SummaryCard } from './components/SummaryCard';
 import { PromoCarousel, type PromoCardData } from './components/PromoCarousel';
 import { RefundCard, type RefundCardData } from './components/RefundCard';
+import { OfferSheet } from './components/OfferSheet';
+import { VouchersButton, VouchersPage } from './components/Vouchers';
+import { OFFERS, type Offer } from './data/offers';
 import { TravelBanner } from './components/TravelBanner';
 import { TabBar, type TabId } from './components/TabBar';
 import { TripsScreen, type TripsLayer } from './components/trips/TripsScreen';
@@ -22,6 +25,7 @@ import { LocationAlert } from './components/LocationAlert';
 import { NearbyNotice } from './components/NearbyNotice';
 import { Toast } from './components/Toast';
 import { ScreenNav } from './components/ScreenNav';
+import { EmptyPanel } from './components/EmptyPanel';
 import type { ScreenId } from './data/screens';
 import helpIcon from './assets/icons/help.svg';
 import profileCard from './assets/cards/profile.svg';
@@ -47,6 +51,8 @@ export function App() {
   const [promos, setPromos] = useState(PROMOS);
   const [tab, setTab] = useState<TabId>('refunds');
   const [trips, setTrips] = useState<Trip[]>(SEED_TRIPS);
+  // Trips set aside while the presenter's Empty switch is on.
+  const stashedTrips = useRef<Trip[] | null>(null);
   const [layer, setLayer] = useState<TripsLayer>(null);
   const [guideOpen, setGuideOpen] = useState(false);
   const [detailId, setDetailId] = useState<string | null>(null);
@@ -60,6 +66,10 @@ export function App() {
   const [locationAsked, setLocationAsked] = useState(false);
   const [savedToast, setSavedToast] = useState(0);
   const [nearby, setNearby] = useState<'idle' | 'shown' | 'done'>('idle');
+  const [offer, setOffer] = useState<Offer | null>(null);
+  const [vouchersOpen, setVouchersOpen] = useState(false);
+  // Presenter toggle: show My refunds as a shopper with no forms yet sees it.
+  const [emptyRefunds, setEmptyRefunds] = useState(false);
   const detailForm = FORMS.find((f) => f.id === detailId);
 
   // Presenter navigation: jump to any screen. Remounting with a new key applies the starting state.
@@ -116,12 +126,13 @@ export function App() {
   }, [firstRunOpen, nearby]);
   const refundsSecondLayer = guideOpen || detailForm !== undefined;
   const tabBarHidden =
-    !loggedIn || !registered || !notifyDone || onboarding !== null || (tab === 'trips' && layer !== null) || (tab === 'refunds' && refundsSecondLayer);
+    !loggedIn || !registered || !notifyDone || onboarding !== null || vouchersOpen || (tab === 'trips' && layer !== null) || (tab === 'refunds' && refundsSecondLayer);
   const qrHidden =
     !loggedIn ||
     !registered ||
     !notifyDone ||
     onboarding !== null ||
+    vouchersOpen ||
     tab === 'tax-free' || (tab === 'trips' && layer !== 'trip') || (tab === 'refunds' && refundsSecondLayer);
 
   return (
@@ -131,7 +142,7 @@ export function App() {
         onWheel={(e) => {
           // The floating tab bar, QR button and bezel sit outside the scroller, so pass their wheel events on.
           const root = e.currentTarget;
-          if (root.querySelector('.onb')) return;
+          if (root.querySelector('.onb, .vouchers-page')) return;
           const scroller =
             root.querySelector('.sheet__body') ?? root.querySelector('.trips__scroll') ?? root.querySelector('.chat__body') ?? root.querySelector('.screen');
           if (scroller && !scroller.contains(e.target as Node)) scroller.scrollBy({ top: e.deltaY });
@@ -185,21 +196,34 @@ export function App() {
           <main className="screen" aria-label="My refunds">
             <div className="screen__content">
               <h1 className="screen__title">My refunds</h1>
-              <SummaryCard onOpenGuide={() => setGuideOpen(true)} />
+              {!emptyRefunds && <SummaryCard onOpenGuide={() => setGuideOpen(true)} />}
               <PromoCarousel
                 cards={promos}
                 onDismiss={(id) => setPromos((prev) => prev.filter((p) => p.id !== id))}
               />
-              <section className="refund-group">
-                <p className="refund-group__date">20/10/2026</p>
-                <FormCard merchant="Loewe" amount="420,00 EUR" onOpen={() => setDetailId('form-spain')} />
-              </section>
-              <section className="refund-group">
-                <p className="refund-group__date">16/10/2026</p>
-                <RefundCard data={REFUNDS[0]} onOpen={() => setDetailId('form-portugal')} />
-              </section>
-              <RefundCard data={REFUNDS[1]} />
-              <RefundCard data={REFUNDS[2]} />
+              <VouchersButton count={emptyRefunds ? 0 : OFFERS.length} onClick={() => setVouchersOpen(true)} />
+              {emptyRefunds && (
+                <EmptyPanel
+                  title="No refunds yet"
+                  text="When you shop at a Tax Free store, your forms show up here, ready for refund."
+                  action="Find Tax Free stores"
+                  onAction={() => goTo('trip')}
+                />
+              )}
+              {!emptyRefunds && (
+                <>
+                  <section className="refund-group">
+                    <p className="refund-group__date">20/10/2026</p>
+                    <FormCard merchant="Loewe" amount="420,00 EUR" onOpen={() => setDetailId('form-spain')} />
+                  </section>
+                  <section className="refund-group">
+                    <p className="refund-group__date">16/10/2026</p>
+                    <RefundCard data={REFUNDS[0]} onOpen={() => setDetailId('form-portugal')} />
+                  </section>
+                  <RefundCard data={REFUNDS[1]} />
+                  <RefundCard data={REFUNDS[2]} />
+                </>
+              )}
               <TravelBanner />
               <a className="help-link" href="#help">
                 <img src={helpIcon} alt="" width={16} height={16} />
@@ -218,6 +242,9 @@ export function App() {
               onLayerChange={setLayer}
               prefs={prefs}
               onEditInterests={() => setOnboarding('edit')}
+              voucherCount={emptyRefunds ? 0 : OFFERS.length}
+              onOpenVouchers={() => setVouchersOpen(true)}
+              onOpenOffer={setOffer}
             />
           </main>
         )}
@@ -256,6 +283,10 @@ export function App() {
           />
         )}
         <TabBar active={tab} hidden={tabBarHidden} onChange={setTab} />
+        {vouchersOpen && (
+          <VouchersPage offers={emptyRefunds ? [] : OFFERS} onSelect={setOffer} onBack={() => setVouchersOpen(false)} />
+        )}
+        {offer && <OfferSheet key={offer.id} offer={offer} onClose={() => setOffer(null)} />}
         {savedToast > 0 && (
           <Toast key={savedToast} message="Your preferences were saved" onClose={() => setSavedToast(0)} />
         )}
@@ -274,7 +305,26 @@ export function App() {
         <QrFab key={`qr-${navKey}`} hidden={qrHidden} low={tabBarHidden} defaultOpen={screen === 'qr'} />
         <div className="device__home" aria-hidden="true" />
       </div>
-      <ScreenNav current={screen} onSelect={goTo} />
+      <ScreenNav
+        current={screen}
+        onSelect={goTo}
+        emptyRefunds={emptyRefunds}
+        onEmptyRefundsChange={(on) => {
+          setEmptyRefunds(on);
+          if (on) {
+            stashedTrips.current = trips;
+            setTrips([]);
+            setNavKey((k) => k + 1);
+            if (tab !== 'trips') setTab('refunds');
+            setGuideOpen(false);
+            setDetailId(null);
+          } else if (stashedTrips.current) {
+            const stashed = stashedTrips.current;
+            stashedTrips.current = null;
+            setTrips((prev) => [...prev, ...stashed]);
+          }
+        }}
+      />
     </div>
   );
 }

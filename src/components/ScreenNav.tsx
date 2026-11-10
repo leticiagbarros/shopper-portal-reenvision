@@ -5,10 +5,12 @@ import { SCREEN_GROUPS, type ScreenId } from '../data/screens';
 interface Props {
   current: ScreenId | null;
   onSelect: (id: ScreenId) => void;
+  emptyRefunds: boolean;
+  onEmptyRefundsChange: (on: boolean) => void;
 }
 
 // Presenter tool that sits outside the phone: jump to any screen of the prototype.
-export function ScreenNav({ current, onSelect }: Props) {
+export function ScreenNav({ current, onSelect, emptyRefunds, onEmptyRefundsChange }: Props) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -28,6 +30,7 @@ export function ScreenNav({ current, onSelect }: Props) {
 
   return (
     <div className="screen-nav" ref={rootRef}>
+      <div className="screen-nav__bar">
       <button
         type="button"
         className="screen-nav__toggle"
@@ -43,6 +46,18 @@ export function ScreenNav({ current, onSelect }: Props) {
         </svg>
         Screens
       </button>
+
+      <button
+        type="button"
+        role="switch"
+        aria-checked={emptyRefunds}
+        className="screen-nav__switch"
+        onClick={() => onEmptyRefundsChange(!emptyRefunds)}
+      >
+        <span className="screen-nav__track" aria-hidden="true" />
+        Empty state
+      </button>
+      </div>
 
       {open && (
         <nav className="screen-nav__panel" id="screen-nav-panel" aria-label="Prototype screens">

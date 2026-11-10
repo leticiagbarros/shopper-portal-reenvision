@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { BAG_SVG } from './icons';
-import { CATEGORY_COLORS, type City, type Store } from '../../data/places';
+import { CATEGORY_COLORS, brandOfStore, type City, type Store } from '../../data/places';
 import { titleHeight, type Snap } from './BottomSheet';
 
 export interface OverviewPin {
@@ -46,10 +46,19 @@ function tripPin(pin: OverviewPin) {
 }
 
 function storePin(store: Store, saved: boolean, done: boolean, selected: boolean) {
+  const brand = brandOfStore(store.id);
   const el = document.createElement('div');
-  el.className = `pin-store${saved ? ' is-saved' : ''}${done ? ' is-done' : ''}${selected ? ' is-selected' : ''}`;
-  el.style.background = CATEGORY_COLORS[store.category];
-  el.innerHTML = BAG_SVG;
+  el.className = `pin-store${brand ? ' has-logo' : ''}${saved ? ' is-saved' : ''}${done ? ' is-done' : ''}${selected ? ' is-selected' : ''}`;
+  if (brand) {
+    const img = document.createElement('img');
+    img.src = brand.logo;
+    img.alt = '';
+    img.draggable = false;
+    el.append(img);
+  } else {
+    el.style.background = CATEGORY_COLORS[store.category];
+    el.innerHTML = BAG_SVG;
+  }
   return L.divIcon({ html: el, className: 'pin-wrap', iconSize: [36, 36], iconAnchor: [18, 18] });
 }
 

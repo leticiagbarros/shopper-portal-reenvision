@@ -15,10 +15,12 @@ interface Props {
   /** The lowest state: 'title' shows only the header above the tab bar. */
   minSnap?: 'peek' | 'title';
   header: ReactNode;
+  /** Rides on the top edge of the sheet and follows it while it moves. */
+  floating?: ReactNode;
   children: ReactNode;
 }
 
-export function BottomSheet({ snap, onSnapChange, minSnap = 'peek', header, children }: Props) {
+export function BottomSheet({ snap, onSnapChange, minSnap = 'peek', header, floating, children }: Props) {
   const sheetRef = useRef<HTMLElement>(null);
   const [dragHeight, setDragHeight] = useState<number | null>(null);
 
@@ -70,6 +72,7 @@ export function BottomSheet({ snap, onSnapChange, minSnap = 'peek', header, chil
       className={`sheet sheet--${snap}${dragHeight !== null ? ' is-dragging' : ''}`}
       style={dragHeight !== null ? { height: dragHeight } : undefined}
     >
+      {floating && <div className="sheet__float">{floating}</div>}
       <div className="sheet__header" onPointerDown={handlePointerDown}>
         <button
           type="button"

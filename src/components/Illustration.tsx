@@ -23,12 +23,9 @@ export function Illustration({ name }: { name: 'add-card' | 'luggage' }) {
       {SETS[name].map((layer) => {
         const [top, right, bottom, left] = layer.inset;
         return (
-          <img
-            key={layer.file}
-            src={urls[`../assets/illustrations/${name}/${layer.file}`]}
-            alt=""
-            style={{ top, right, bottom, left }}
-          />
+          <span key={layer.file} className="illustration__layer" style={{ top, right, bottom, left }}>
+            <img src={urls[`../assets/illustrations/${name}/${layer.file}`]} alt="" />
+          </span>
         );
       })}
     </span>

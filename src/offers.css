@@ -1,0 +1,345 @@
+/* Offer cards: same card language as the tips (white, hairline border, 12px radius) */
+.offer-card {
+  display: flex;
+  flex: none;
+  align-items: flex-start;
+  gap: 12px;
+  width: 295px;
+  min-height: 120px;
+  padding: 16px;
+  scroll-snap-align: start;
+  user-select: none;
+  background: var(--surface-6);
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  transition: transform 120ms ease;
+}
+
+.offer-card:active {
+  transform: scale(0.98);
+}
+
+.offer-logo {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  padding: 6px;
+  background: var(--surface);
+  border-radius: 12px;
+}
+
+.offer-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.offer-logo--large {
+  width: 64px;
+  height: 64px;
+  padding: 8px;
+  border-radius: 16px;
+}
+
+.offer-card__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  gap: 4px;
+}
+
+.offer-card__title {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 20px;
+  color: #000000;
+}
+
+.offer-card__desc {
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--onsurface-low);
+}
+
+.offer-chip {
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  color: var(--onsurface-low);
+  background: var(--surface);
+  border-radius: 8px;
+}
+
+.offer-chip.is-urgent {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.offer-card--wide {
+  width: 100%;
+  min-height: 0;
+}
+
+/* Vouchers entry: opens the full list */
+.vouchers-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 14px 14px 12px;
+  background: linear-gradient(180deg, #ffffff, #fafafa);
+  border: 1px solid #ececee;
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition:
+    transform 120ms ease,
+    box-shadow 160ms ease;
+}
+
+.vouchers-btn:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.vouchers-btn:active {
+  transform: scale(0.98);
+}
+
+.vouchers-btn__art {
+  flex: none;
+  /* The artwork has built-in whitespace; trim it so the button keeps its height */
+  margin: -8px 0;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.14));
+  transition: transform 220ms cubic-bezier(0.34, 1.45, 0.64, 1);
+}
+
+.vouchers-btn:hover .vouchers-btn__art,
+.vouchers-btn:active .vouchers-btn__art {
+  transform: rotate(-6deg) scale(1.06);
+}
+
+.vouchers-btn__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.vouchers-btn__title {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: -0.1px;
+}
+
+.vouchers-btn__sub {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--onsurface-low);
+}
+
+/* The clip keeps the slide inside the phone frame */
+.vouchers-clip {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.screen.vouchers-page {
+  animation: offer-rise 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.vouchers-empty {
+  padding: 24px 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--onsurface-low);
+}
+
+.vouchers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 560px) {
+  .vouchers-clip {
+    position: absolute;
+    inset: 12px;
+    border-radius: 50px;
+  }
+}
+
+/* Offer sheet */
+.offer-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  animation: offer-fade 200ms ease;
+}
+
+.offer-sheet {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 430px;
+  max-height: 92%;
+  overflow-y: auto;
+  background: var(--surface-6);
+  border-radius: 24px 24px 0 0;
+  animation: offer-rise 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.offer-sheet__hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 24px 20px 4px;
+}
+
+.offer-sheet__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: var(--onsurface-highest);
+  background: #f4f4f5;
+  border-radius: 50%;
+}
+
+.offer-sheet__title {
+  margin-top: 8px;
+  font-family: var(--font-title);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.offer-sheet__desc {
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--onsurface-low);
+}
+
+.offer-sheet__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.offer-sheet__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 20px calc(28px + env(safe-area-inset-bottom));
+}
+
+.offer-code {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  background: var(--surface);
+  border-radius: 16px;
+}
+
+.offer-code__text {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.offer-code .barcode svg {
+  height: 72px;
+}
+
+.offer-sheet__action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  background: #030712;
+  border-radius: 8px;
+  transition:
+    background 200ms ease,
+    transform 120ms ease;
+}
+
+.offer-sheet__action:active {
+  transform: scale(0.98);
+}
+
+.offer-sheet__action.is-done {
+  background: #15803d;
+}
+
+.offer-sheet__action svg {
+  width: 20px;
+  height: 20px;
+}
+
+.offer-sheet__terms {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--onsurface-low);
+}
+
+@keyframes offer-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes offer-rise {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+/* Inside the iPhone frame on desktop */
+@media (min-width: 560px) {
+  .offer-scrim {
+    position: absolute;
+    inset: 12px;
+    overflow: hidden;
+    border-radius: 50px;
+  }
+
+  .offer-sheet {
+    border-radius: 24px 24px 50px 50px;
+  }
+}

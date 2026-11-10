@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState, type Dispatch, type SetStateAction } from
 import '../../trips.css';
 import { BottomSheet, type Snap } from './BottomSheet';
 import { CreateTrip } from './CreateTrip';
+import { offerForStore, type Offer } from '../../data/offers';
+import { VouchersButton } from '../Vouchers';
 import { ArrowLeft, CategoryIcon, Plus, Search } from './icons';
 import { ReminderDialog } from './ReminderDialog';
 import { TripDetail } from './TripDetail';
@@ -20,15 +22,18 @@ interface Props {
   onLayerChange: (layer: TripsLayer) => void;
   prefs: Preferences;
   onEditInterests: () => void;
+  voucherCount: number;
+  onOpenVouchers: () => void;
+  onOpenOffer: (offer: Offer) => void;
   /** Opens straight at a view, for presenter navigation. */
   initial?: 'list' | 'trip' | 'create';
 }
 
-export function TripsScreen({ trips, setTrips, onLayerChange, prefs, onEditInterests, initial = 'list' }: Props) {
+export function TripsScreen({ trips, setTrips, onLayerChange, prefs, onEditInterests, voucherCount, onOpenVouchers, onOpenOffer, initial = 'list' }: Props) {
   const [view, setView] = useState<View>(() =>
     initial === 'trip' && trips[0] ? { name: 'trip', tripId: trips[0].id } : initial === 'create' ? { name: 'create' } : { name: 'list' },
   );
-  const [category, setCategory] = useState<Category | 'All'>('All');
+  const [category, setCategory] = useState<Category | 'All' | 'Vouchers'>('All');
   const [query, setQuery] = useState('');
   const [askReminder, setAskReminder] = useState(false);
   const [snap, setSnap] = useState<Snap>(initial === 'list' ? 'title' : 'half');
@@ -50,7 +55,9 @@ export function TripsScreen({ trips, setTrips, onLayerChange, prefs, onEditInter
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
     return cityStores.filter(
-      (s) => (category === 'All' || s.category === category) && (!q || s.name.toLowerCase().includes(q)),
+      (s) =>
+        (category === 'All' || (category === 'Vouchers' ? offerForStore(s) !== undefined : s.category === category)) &&
+        (!q || s.name.toLowerCase().includes(q)),
     );
   }, [cityStores, category, query]);
 
@@ -68,7 +75,13 @@ export function TripsScreen({ trips, setTrips, onLayerChange, prefs, onEditInter
     };
   }, [city, trip, visible, selectedId, view.name, trips]);
 
-  const layer: TripsLayer = askReminder ? 'dialog' : view.name === 'list' ? (snap === 'title' ? null : 'sheet') : view.name;
+  const noTrips = view.name === 'list' && trips.length === 0;
+  // The empty home keeps the tab bar, so its sheet doesn't count as a covering layer.
+  const layer: TripsLayer = askReminder ? 'dialog' : view.name === 'list' ? (snap === 'title' || noTrips ? null : 'sheet') : view.name;
+  // With no trips the empty state lives in the sheet body, so keep the sheet open.
+  useEffect(() => {
+    if (view.name === 'list' && trips.length === 0) setSnap((s) => (s === 'title' ? 'peek' : s));
+  }, [view.name, trips.length]);
   useEffect(() => {
     onLayerChange(layer);
     return () => onLayerChange(null);
@@ -177,6 +190,7 @@ export function TripsScreen({ trips, setTrips, onLayerChange, prefs, onEditInter
         onSelect={selectStore}
         category={category}
         onCategory={setCategory}
+        onOpenOffer={onOpenOffer}
         onToggle={toggleStore}
         onToggleDone={toggleDone}
         prefs={prefs}
@@ -204,17 +218,24 @@ export function TripsScreen({ trips, setTrips, onLayerChange, prefs, onEditInter
       </div>
     );
     body = (
-      <TripList
-        trips={trips}
-        onOpen={openTrip}
-        onDelete={(id) => setTrips((prev) => prev.filter((t) => t.id !== id))}
-      />
+      <>
+        {trips.length > 0 && (
+          <div className="trips-vouchers">
+            <VouchersButton count={voucherCount} onClick={onOpenVouchers} />
+          </div>
+        )}
+        <TripList
+          trips={trips}
+          onOpen={openTrip}
+          onDelete={(id) => setTrips((prev) => prev.filter((t) => t.id !== id))}
+        />
+      </>
     );
   }
 
   if (scene) {
     return (
-      <div className="trips trips--map">
+      <div className={`trips trips--map${noTrips ? ' trips--empty' : ''}`}>
         <TripMap scene={scene} snap={snap} onOpenTrip={openTrip} onSelectStore={selectStore} />
         {view.name === 'trip' && (
           <label className="map-search">
@@ -269,19 +290,21 @@ export function TripsScreen({ trips, setTrips, onLayerChange, prefs, onEditInter
             )}
           </>
         )}
-        <BottomSheet snap={snap} onSnapChange={setSnap} minSnap={view.name === 'list' ? 'title' : 'peek'} header={header}>
+        <BottomSheet
+          snap={snap}
+          onSnapChange={setSnap}
+          minSnap={view.name === 'list' ? 'title' : 'peek'}
+          header={header}
+          floating={
+            view.name === 'list' && (
+              <button type="button" className="trips-add" aria-label="New trip" onClick={() => setView({ name: 'create' })}>
+                <Plus />
+              </button>
+            )
+          }
+        >
           {body}
         </BottomSheet>
-        {view.name === 'list' && (
-          <button
-            type="button"
-            className={`trips-add${snap === 'title' ? ' is-above-sheet' : ''}`}
-            aria-label="New trip"
-            onClick={() => setView({ name: 'create' })}
-          >
-            <Plus />
-          </button>
-        )}
         {askReminder && city && (
           <ReminderDialog country={city.country} onSave={saveReminder} onSkip={() => saveReminder(null)} />
         )}

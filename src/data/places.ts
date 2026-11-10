@@ -199,6 +199,17 @@ export function matchScore(store: Store, prefs: Preferences): { score: number; r
   return { score: 0 };
 }
 
+// Prototype: there is no live location, so distance is measured from the city centre (haversine).
+export function distanceLabel(store: Store, city: City): string {
+  const rad = (d: number) => (d * Math.PI) / 180;
+  const [lat, lng] = city.center;
+  const a =
+    Math.sin(rad(store.lat - lat) / 2) ** 2 +
+    Math.cos(rad(lat)) * Math.cos(rad(store.lat)) * Math.sin(rad(store.lng - lng) / 2) ** 2;
+  const km = 6371 * 2 * Math.asin(Math.sqrt(a));
+  return km < 1 ? `${Math.round(km * 10) * 100} m` : `${km.toFixed(1)} km`;
+}
+
 const fmtDay = new Intl.DateTimeFormat('en-GB', { day: 'numeric', timeZone: 'UTC' });
 const fmtDayMonth = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' });
 const fmtFull = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
